@@ -1,15 +1,19 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import NavElementContainer from "./NavElementContainer";
 
 export default function MenuNav({ open, setOpen }) {
   const list = useRef();
-  const [size, setSize] = useState(() => window.innerWidth);
+  const [size, setSize] = useState(0);
 
   const handleClick = (e) => {
     list.current.style.transform = `rotate(${open ? 90 : 0}deg)`;
     setOpen((prevOpen) => !prevOpen);
-    setSize(window.innerWidth);
   };
+
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  useEffect(() => {
+    setSize(window.innerWidth);
+  });
   return (
     <>
       <div className="navFixed">
