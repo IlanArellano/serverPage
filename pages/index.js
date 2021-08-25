@@ -105,6 +105,27 @@ export default function Home() {
               opacity: 1;
             }
           }
+
+          @media screen and (min-width: 1620px) {
+            .mainContainer {
+              font-size: 1rem;
+            }
+          }
+          @media screen and (min-width: 1200px) {
+            .mainContainer {
+              font-size: 1.5rem;
+            }
+          }
+          @media screen and (max-width: 1000px) {
+            .mainContainer {
+              margin: 0 15vw;
+            }
+          }
+          @media screen and (max-width: 768px) {
+            .mainContainer {
+              margin: 0 10vw;
+            }
+          }
         `}
       </style>
     </div>

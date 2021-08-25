@@ -3,21 +3,30 @@ import NavElementContainer from "./NavElementContainer";
 
 export default function MenuNav({ open, setOpen }) {
   const list = useRef();
+  const [size, setSize] = useState(() => window.innerWidth);
 
   const handleClick = (e) => {
     list.current.style.transform = `rotate(${open ? 90 : 0}deg)`;
     setOpen((prevOpen) => !prevOpen);
+    setSize(window.innerWidth);
   };
   return (
-    <div className="iMenu">
-      <div className="Lista" ref={list} onClick={handleClick}>
-        <i className="bi bi-list" />
+    <>
+      <div className="navFixed">
+        <div className="iMenu">
+          <div className="Lista" ref={list} onClick={handleClick}>
+            <i className="bi bi-list" />
+          </div>
+          <NavElementContainer open={open} size={size} />
+        </div>
       </div>
-      <NavElementContainer open={open} />
 
       <style jsx>{`
-        .IMenu {
-          position: relative;
+        .navFixed {
+          position: fixed;
+          z-index: 2;
+        }
+        .iMenu {
           color: #ffffff;
         }
         .Lista {
@@ -25,9 +34,13 @@ export default function MenuNav({ open, setOpen }) {
           cursor: pointer;
           display: flex;
           justify-content: center;
+          align-items: center;
+          height: 80px;
+          background: black;
+          width: 80px;
           transition: all 0.3s ease;
         }
       `}</style>
-    </div>
+    </>
   );
 }

@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import Image from "next/image";
 import serverStatus from "../services/serverStatus";
 import MenuNav from "./ui/MenuNav";
+import Button from "./ui/Button";
 
 export default function Navbar({ open, setOpen }) {
   const [status, setStatus] = useState({});
@@ -13,9 +14,9 @@ export default function Navbar({ open, setOpen }) {
   }, []);
   return (
     <nav>
+      <MenuNav open={open} setOpen={setOpen} />
       <div className="navContainer">
         <div className="Menu">
-          <MenuNav open={open} setOpen={setOpen} />
           <div>
             <a className="aInicio" href="#/">
               <Image
@@ -33,12 +34,15 @@ export default function Navbar({ open, setOpen }) {
               ? `${status.onlinePlayers}/${status.maxPlayers}`
               : `${0}/${0}`
           }`}</div>
-          <button>
+          <Button
+            className="Discordbutton"
+            onClick={() => alert("No funciona todavia")}
+          >
             Iniciar Sesión con{" "}
             <span>
               Discord<i className="bi bi-discord"></i>
             </span>
-          </button>
+          </Button>
         </div>
       </div>
 
@@ -47,13 +51,14 @@ export default function Navbar({ open, setOpen }) {
           nav {
             background: #272f38;
             color: #ffffff;
-            padding: 1rem 2rem;
             height: 80px;
           }
           .navContainer {
             display: flex;
+            padding: 1rem 2rem 1rem 0;
             justify-content: space-between;
             align-items: center;
+            width: 100%;
           }
           .status {
             display: flex;
@@ -61,7 +66,7 @@ export default function Navbar({ open, setOpen }) {
             align-items: center;
             width: 15%;
           }
-          button {
+          .Discordbutton {
             background: transparent;
             color: #ffffff;
             border: none;
@@ -69,7 +74,7 @@ export default function Navbar({ open, setOpen }) {
             transition: all 0.5s ease;
             width: 60%;
           }
-          button:hover {
+          .Discordbutton:hover {
             color: red;
           }
           span {
@@ -83,6 +88,33 @@ export default function Navbar({ open, setOpen }) {
           .Menu {
             display: flex;
             align-items: center;
+            margin-left: 80px;
+          }
+
+          @media screen and (max-width: 1070px) {
+            .status {
+              width: 20%;
+            }
+            @media screen and (max-width: 810px) {
+              .status {
+                width: 30%;
+              }
+            }
+            @media screen and (max-width: 768px) {
+              nav {
+                padding: 0;
+              }
+            }
+            @media screen and (max-width: 560px) {
+              .status {
+                width: 35%;
+              }
+            }
+            @media screen and (max-width: 490px) {
+              .status {
+                width: 50%;
+              }
+            }
           }
         `}
       </style>

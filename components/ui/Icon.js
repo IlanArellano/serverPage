@@ -6,10 +6,15 @@ Pinta un icono proveniente de la libreria de BootstrapIcons
 @param {Number} size El tamaño del icono, por defecto es 10 px
 @see https://icons.getbootstrap.com
 */
-export default function Icon({ className = "bi bi-bug", size = 10 }) {
+export default function Icon({
+  className = "bi bi-bug",
+  size = 10,
+  onClick = undefined,
+  ref = undefined,
+}) {
   return (
     <>
-      <i className={className} />
+      <i className={className} ref={ref} onClick={onClick} />
 
       <style jsx>
         {`

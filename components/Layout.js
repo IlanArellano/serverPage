@@ -16,6 +16,12 @@ export default function Layout({ children }) {
             transition: margin-left 0.3s ease;
             margin-left: ${open ? "300px" : "0"};
           }
+
+          @media screen and (max-width: 768px) {
+            main {
+              margin-left: 0;
+            }
+          }
         `}
       </style>
     </>
