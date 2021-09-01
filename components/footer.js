@@ -1,6 +1,8 @@
 import React from "react";
 
-export default function Footer() {
+export default function Footer({ display }) {
+  if (!display) return null;
+
   return (
     <footer>
       <div>

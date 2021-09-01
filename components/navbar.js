@@ -3,8 +3,10 @@ import Image from "next/image";
 import serverStatus from "../services/serverStatus";
 import MenuNav from "./ui/MenuNav";
 import Button from "./ui/Button";
+import { useRouter } from "next/router";
 
-export default function Navbar({ open, setOpen }) {
+export default function Navbar({ open, setOpen, display }) {
+  const router = useRouter();
   const [status, setStatus] = useState({});
   useEffect(() => {
     (async function () {
@@ -12,6 +14,9 @@ export default function Navbar({ open, setOpen }) {
       setStatus(await serverStatus());
     })();
   }, []);
+
+  if (!display) return null;
+
   return (
     <nav>
       <MenuNav open={open} setOpen={setOpen} />
@@ -36,12 +41,9 @@ export default function Navbar({ open, setOpen }) {
           }`}</div>
           <Button
             className="Discordbutton"
-            onClick={() => alert("No funciona todavia")}
+            onClick={() => router.push("/login")}
           >
-            Iniciar Sesión con{" "}
-            <span>
-              Discord<i className="bi bi-discord"></i>
-            </span>
+            Iniciar Sesión
           </Button>
         </div>
       </div>
