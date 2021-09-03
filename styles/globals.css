@@ -37,6 +37,12 @@ a {
   color: red;
   font-weight: bold;
 }
+.Principalerror {
+  font-size: 1rem;
+  text-align: center;
+  color: red;
+  font-weight: bold;
+}
 
 .form-control input {
   font-size: 20px;

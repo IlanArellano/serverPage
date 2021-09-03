@@ -13,7 +13,10 @@ const stepperElements = theElements.map((el) => {
 });
 
 export default function Register() {
-  const [elements, setElements] = useState(() => stepperElements);
+  const [elements, setElements] = useState(() => {
+    stepperElements[0].active = true;
+    return stepperElements;
+  });
   const [step, setStep] = useState(0);
 
   useEffect(() => {
@@ -34,19 +37,68 @@ export default function Register() {
         <meta name="description" content="The server Page" />
         <link rel="icon" href="/statics/icon.png" />
       </Head>
-      <div className="registerContainer">
-        <Stepper elements={elements} />
-        <div className="registerInformation">dfds</div>
-        <Step1 />
-        <button onClick={() => console.log(elements)}>Show</button>
+      <div className="registerMain">
+        <div className="registerContainer">
+          <Stepper elements={elements} />
+          <div className="StepsContainer">
+            <Step1 />
+          </div>
+        </div>
       </div>
 
       <style jsx>
         {`
-          .registerContainer {
+          .registerMain {
             width: 100%;
-            height: 100%;
-            margin: auto 0;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+          }
+
+          .registerContainer {
+            background: rgba(255, 255, 255, 0.8);
+            border: 1px solid rgba(0, 0, 0, 0.1);
+            border-radius: 30px;
+            padding: 2rem 0;
+            margin: 0 10%;
+            min-height: 85%;
+          }
+
+          .StepsContainer {
+            margin-top: 10rem;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+          }
+
+          @media screen and (max-height: 830px) {
+            .StepsContainer {
+              margin-top: 2rem;
+            }
+          }
+          @media screen and (max-height: 730px) {
+            .registerMain {
+              justify-content: flex-start;
+            }
+            .registerContainer {
+              margin-top: 2rem;
+              min-height: 90%;
+            }
+          }
+          @media screen and (max-height: 685px) {
+            .registerMain {
+              justify-content: flex-start;
+            }
+            .registerContainer {
+              margin-top: 2rem;
+              min-height: 100%;
+            }
+          }
+          @media screen and (max-width: 360px) {
+            .registerContainer {
+              margin: 1%;
+            }
           }
         `}
       </style>
