@@ -34,6 +34,6 @@ export default async function handleRegister(req, res) {
 
     res.status(201).json({ query: query });
   } catch (error) {
-    res.status(500).json({ error });
+    res.status(500).json({ error: JSON.stringify(error) });
   }
 }
