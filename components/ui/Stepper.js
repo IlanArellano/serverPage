@@ -1,16 +1,22 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 
-export default function Stepper({ elements }) {
-  console.log(elements);
+export default function Stepper({ elements, update }) {
   if (!Array.isArray(elements))
     throw new Error("Los elementos deben ser de tipo objeto");
+  const [elementsStep, setElementsStep] = useState(() => elements);
+
+  useEffect(() => {
+    console.log(elements);
+    setElementsStep(elements);
+  }, [elements, update]);
+
   return (
     <>
       <div className="wrapper-progressBar">
         <ul className="progressBar">
-          {elements.map((el, i) => {
+          {elementsStep.map((el) => {
             return (
-              <li className={`${el.active ? "active" : ""}`} key={i}>
+              <li className={`${el.active ? "active" : ""}`} key={el.id}>
                 {el.name}
               </li>
             );

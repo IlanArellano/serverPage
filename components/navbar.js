@@ -34,11 +34,16 @@ export default function Navbar({ open, setOpen, display }) {
           </div>
         </div>
         <div className="status">
-          <div>{`Online: ${
-            status.onlinePlayers != undefined && status.maxPlayers != undefined
-              ? `${status.onlinePlayers}/${status.maxPlayers}`
-              : `${0}/${0}`
-          }`}</div>
+          <div>
+            {!status.error
+              ? `Online: ${
+                  status.onlinePlayers != undefined &&
+                  status.maxPlayers != undefined
+                    ? `${status.onlinePlayers}/${status.maxPlayers}`
+                    : `${0}/${0}`
+                }`
+              : "Servidor en\n Mantenimiento:("}
+          </div>
           <Button
             className="Discordbutton"
             onClick={() => router.push("/login")}

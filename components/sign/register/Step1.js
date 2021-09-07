@@ -2,29 +2,75 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import Icon from "../../ui/Icon";
 import { handleErrors } from "../../../utils/form/handleErrors";
+import registerController from "../../../services/sign/register";
+import Loader1 from "../../ui/loaders/Loader1";
 
-const usernameLenght = 8;
-const passwordLenght = 16;
+const usernameLenght = 12;
+const passwordmaxLenght = 16;
 
-export default function Step1() {
+const emailPattern =
+  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+const existMessage = (field) =>
+  `El ${field} que has registrado ya existe, por favor selecciona otro`;
+
+export default function Step1({ setStep }) {
   const [mainError, setMainError] = useState(null);
+  const [disable, setDisable] = useState(false);
+
   const {
     handleSubmit,
     register,
-    formState: { errors, isValid, isDirty },
+    formState: { errors },
     reset,
   } = useForm({ mode: "onChange" });
-  const onSubmit = (data) => {
+
+  const onSubmit = async (data) => {
+    setDisable(true);
+    setMainError(null);
+    const { email, user, password } = data;
+    if (!emailPattern.test(email)) {
+      setMainError(
+        "El formato en el campo de Correo Electrónico no esta permitido"
+      );
+      setDisable(false);
+      return;
+    }
     if (data.password !== data.Rpassword) {
       setMainError(
         "La contraseña no coincide con el campo de Repetir contraseña"
       );
+      setDisable(false);
+      return;
+    }
+
+    //addUser
+    const registrarUsuario = await registerController({
+      email,
+      username: user,
+      password,
+    });
+    if (registrarUsuario.error) {
+      setMainError("Ha ocurrido un error Inesperado");
+      setDisable(false);
+      return;
+    } else if (registrarUsuario.userExist && registrarUsuario.emailExist) {
+      setMainError(existMessage("usuario y correo"));
+      setDisable(false);
+      return;
+    } else if (registrarUsuario.userExist) {
+      setMainError(existMessage("usuario"));
+      setDisable(false);
+      return;
+    } else if (registrarUsuario.emailExist) {
+      setMainError(existMessage("correo"));
+      setDisable(false);
       return;
     }
     setMainError(null);
-    console.log(data);
+    setDisable(false);
 
-    alert("Has completado el primer paso!");
+    setTimeout(() => setStep(1), 1000);
     reset();
   };
 
@@ -34,14 +80,19 @@ export default function Step1() {
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="Principalerror">{mainError}</div>
           <div className="form-control">
-            <span className="label">Correo Electrónico</span>
-            <input type="text" {...register("email", { required: true })} />
+            <span className="label">Correo Electrónico*</span>
+            <input
+              type="text"
+              {...register("email", {
+                required: true,
+              })}
+            />
             {errors.email && (
               <span className="errors">{handleErrors(errors.email)}</span>
             )}
           </div>
           <div className="form-control">
-            <span className="label">Nombre de usuario</span>
+            <span className="label">Nombre de usuario*</span>
             <input
               type="text"
               {...register("user", {
@@ -51,47 +102,60 @@ export default function Step1() {
             />
             {errors.user && (
               <span className="errors">
-                {handleErrors(errors.user, { maxLenght: usernameLenght })}
+                {handleErrors(errors.user, {
+                  maxLenght: usernameLenght,
+                })}
               </span>
             )}
           </div>
           <div className="form-control">
-            <span className="label">Contraseña</span>
+            <span className="label">Contraseña*</span>
             <input
               type="password"
               {...register("password", {
                 required: true,
-                maxLength: passwordLenght,
+                maxLength: passwordmaxLenght,
               })}
             />
             {errors.password && (
               <span className="errors">
-                {handleErrors(errors.password, { maxLenght: passwordLenght })}
+                {handleErrors(errors.password, {
+                  maxLenght: passwordmaxLenght,
+                })}
               </span>
             )}
           </div>
           <div className="form-control">
-            <span className="label">Repetir Contraseña</span>
+            <span className="label">Repetir Contraseña*</span>
             <input
               type="password"
               {...register("Rpassword", {
                 required: true,
-                maxLength: passwordLenght,
+                maxLength: passwordmaxLenght,
               })}
             />
             {errors.Rpassword && (
               <span className="errors">
-                {handleErrors(errors.Rpassword, { maxLenght: passwordLenght })}
+                {handleErrors(errors.Rpassword, {
+                  maxLenght: passwordmaxLenght,
+                })}
               </span>
             )}
           </div>
           <div className="form-buttons">
             <button
               type="submit"
-              className={`${isValid || isDirty ? "SiguienteHover" : ""}`}
+              className={!disable ? "SiguienteHover" : ""}
+              disabled={disable}
             >
-              <span>Siguiente</span>
-              <Icon className="bi bi-arrow-right-circle-fill" size={20} />
+              {disable ? (
+                <Loader1 color="black" />
+              ) : (
+                <>
+                  <span>Siguiente</span>
+                  <Icon className="bi bi-arrow-right-circle-fill" size={20} />
+                </>
+              )}
             </button>
           </div>
           <div className="form-footer"></div>
@@ -100,6 +164,10 @@ export default function Step1() {
 
       <style jsx>
         {`
+
+        button[disabled] {
+          cursor: progress;
+        }
           .registerForm {
             width: 40%;
           }

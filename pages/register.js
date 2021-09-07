@@ -1,4 +1,4 @@
-import React, { useState, useEffect, lazy, Suspense } from "react";
+import React, { useState, useEffect } from "react";
 import Head from "next/head";
 import dynamic from "next/dynamic";
 import Stepper from "../components/ui/Stepper";
@@ -18,17 +18,20 @@ export default function Register() {
     return stepperElements;
   });
   const [step, setStep] = useState(0);
+  const [update, setUpdate] = useState(false);
 
   useEffect(() => {
+    console.log("sd");
     setElements((prev) => {
-      //Limpia el estado de active antes de asignarselo al paso que sigue
+      /*//Limpia el estado de active antes de asignarselo al paso que sigue
       for (let i = 0; i < prev.length; i++) {
         prev[i].active = false;
-      }
+      }*/
       prev[step].active = true;
       return prev;
     });
-  }, [step]);
+    setUpdate((prev) => !prev);
+  }, [elements, step, setUpdate]);
 
   return (
     <>
@@ -39,9 +42,9 @@ export default function Register() {
       </Head>
       <div className="registerMain">
         <div className="registerContainer">
-          <Stepper elements={elements} />
+          <Stepper elements={elements} update={update} />
           <div className="StepsContainer">
-            <Step1 />
+            <Step1 setStep={setStep} />
           </div>
         </div>
       </div>
