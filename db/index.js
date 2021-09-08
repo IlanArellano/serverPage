@@ -6,7 +6,7 @@ export const getConnection = async () => {
     const pool = await sql.connect(options);
     return pool;
   } catch (error) {
-    return { error };
+    return error;
   }
 };
 
