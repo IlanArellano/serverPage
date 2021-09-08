@@ -7,6 +7,6 @@ export default async function test(req, res) {
 
     res.status(200).json(query);
   } catch (error) {
-    res.status(500).json({ error });
+    res.json({ error: `Ha ocurrido un error: ${JSON.stringify(error)}` });
   }
 }
