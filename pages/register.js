@@ -3,8 +3,10 @@ import Head from "next/head";
 import dynamic from "next/dynamic";
 import Stepper from "../components/ui/Stepper";
 import theElements from "../utils/stepperElements";
+import useUser from "../hooks/useUser";
 
 const Step1 = dynamic(theElements[0].component, { loading: () => null });
+const Step2 = dynamic(theElements[1].component, { loading: () => null });
 
 //Elimina el import dinamico del componente del objeto para que no se guarde en el state
 const stepperElements = theElements.map((el) => {
@@ -13,21 +15,34 @@ const stepperElements = theElements.map((el) => {
 });
 
 export default function Register() {
+  const { getUser } = useUser();
+  const user = getUser();
   const [elements, setElements] = useState(() => {
     stepperElements[0].active = true;
     return stepperElements;
   });
-  const [step, setStep] = useState(0);
+  const [step, setStep] = useState(() => {
+    if (user === null || user.error) {
+      return 0;
+    } else if (
+      user.user &&
+      user.password &&
+      !user.error &&
+      user.access_token === undefined
+    ) {
+      return 1;
+    } else {
+      return 2;
+    }
+  });
   const [update, setUpdate] = useState(false);
 
   useEffect(() => {
-    console.log("sd");
+    console.log(step);
     setElements((prev) => {
-      /*//Limpia el estado de active antes de asignarselo al paso que sigue
-      for (let i = 0; i < prev.length; i++) {
-        prev[i].active = false;
-      }*/
-      prev[step].active = true;
+      for (let i = 0; i <= step; i++) {
+        prev[i].active = true;
+      }
       return prev;
     });
     setUpdate((prev) => !prev);
@@ -44,7 +59,13 @@ export default function Register() {
         <div className="registerContainer">
           <Stepper elements={elements} update={update} />
           <div className="StepsContainer">
-            <Step1 setStep={setStep} />
+            {step === 0 ? (
+              <Step1 setStep={setStep} />
+            ) : step === 1 ? (
+              <Step2 setStep={setStep} />
+            ) : (
+              <div>Wey Noooo</div>
+            )}
           </div>
         </div>
       </div>

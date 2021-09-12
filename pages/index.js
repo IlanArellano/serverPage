@@ -13,12 +13,14 @@ export default function Home() {
         </Head>
         <div className="mainContainer">
           <div className="logoContainer">
+            {/*
             <Image
               src="/statics/serverLogo.png"
               alt="logo"
               width={2048}
               height={1152}
             />
+            */}
           </div>
           <span>Bienvenidos a Nuestro Servidor!</span>
         </div>

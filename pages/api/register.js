@@ -11,28 +11,27 @@ export default async function handleRegister(req, res) {
     console.log(req.body);
     const pool = await getConnection();
 
-    const Exist =
-      await pool.query`SELECT * FROM usuarios WHERE usuario = ${username} OR correo = ${email}`;
-    if (Exist.recordset.length > 0) {
-      const findUser = Exist.recordset.find((c) => c.usuario === username);
-      const findEmail = Exist.recordset.find((c) => c.correo === email);
-
-      return res.status(201).json({
-        userExist: findUser ? true : false,
-        emailExist: findEmail ? true : false,
-      });
-    }
-
     let newPassword = await encryptPassword(password);
 
     if (!newPassword) {
       newPassword = password;
     }
 
-    const query =
-      await pool.query`INSERT INTO usuarios (correo, usuario, contraseña) VALUES (${email}, ${username}, ${newPassword})`;
+    const registerUser =
+      await pool.query`EXEC dbo.ADD_USER_REGISTER ${email}, ${username}, ${newPassword}`;
+    //Si el usuario existe
+    if (registerUser.recordset && registerUser.recordset.length > 0) {
+      const findUser = registerUser.recordset.find(
+        (c) => c.usuario === username
+      );
+      const findEmail = registerUser.recordset.find((c) => c.correo === email);
 
-    res.status(201).json({ query: query });
+      return res.status(201).json({
+        userExist: findUser ? true : false,
+        emailExist: findEmail ? true : false,
+      });
+    }
+    res.status(201).json({ success: true });
   } catch (error) {
     res.status(500).json({ error: JSON.stringify(error) });
   }

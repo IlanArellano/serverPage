@@ -4,6 +4,7 @@ import Icon from "../../ui/Icon";
 import { handleErrors } from "../../../utils/form/handleErrors";
 import registerController from "../../../services/sign/register";
 import Loader1 from "../../ui/loaders/Loader1";
+import useUser from "../../../hooks/useUser";
 
 const usernameLenght = 12;
 const passwordmaxLenght = 16;
@@ -15,6 +16,7 @@ const existMessage = (field) =>
   `El ${field} que has registrado ya existe, por favor selecciona otro`;
 
 export default function Step1({ setStep }) {
+  const { setUserC } = useUser();
   const [mainError, setMainError] = useState(null);
   const [disable, setDisable] = useState(false);
 
@@ -22,7 +24,6 @@ export default function Step1({ setStep }) {
     handleSubmit,
     register,
     formState: { errors },
-    reset,
   } = useForm({ mode: "onChange" });
 
   const onSubmit = async (data) => {
@@ -70,8 +71,8 @@ export default function Step1({ setStep }) {
     setMainError(null);
     setDisable(false);
 
+    setUserC({ user, email });
     setTimeout(() => setStep(1), 1000);
-    reset();
   };
 
   return (

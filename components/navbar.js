@@ -24,12 +24,12 @@ export default function Navbar({ open, setOpen, display }) {
         <div className="Menu">
           <div>
             <a className="aInicio" href="#/">
-              <Image
-                src="/statics/serverLogo.png"
-                alt="Inicio"
-                width={90}
-                height={50}
-              />
+              {/* <Image
+               src="/statics/serverLogo.png"
+               alt="Inicio"
+               width={90}
+               height={50}
+             />*/}
             </a>
           </div>
         </div>

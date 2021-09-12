@@ -5,12 +5,13 @@ const stepperElements = [
     id: i++,
     name: "Ingresa tus datos",
     active: false,
-    component: () => import("../components/sign/register"),
+    component: () => import("../components/sign/register/Step1"),
   },
   {
     id: i++,
     name: "Enlaza tu cuenta de Discord",
     active: false,
+    component: () => import("../components/sign/register/Step2"),
   },
   {
     id: i++,
